@@ -13,6 +13,8 @@
 # Output: "triSurface" contains the STL files of the GROUPs
 # Output: "system" folder contains the files - controlDict, decomposeParDict, fvSchemes, fvSolutions, snappyHexMeshDict
 # Limitations: Need to manually delete the "case" folder before exporting every time
+# Notes: No warranty on results. Use at your own risk/discretion
+# Notes: Code is free. Appreciate feedback/acknowledging when using it
 # Created by: Venugopalan Raghavan
 # STL Plugin amended from the skp_to_dxf.rb plugin (by Nathan Bromham & Konrad Shroeder)
 
