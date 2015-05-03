@@ -19,7 +19,6 @@
 # STL Plugin amended from the skp_to_dxf.rb plugin (by Nathan Bromham & Konrad Shroeder)
 
 require 'sketchup.rb'
-require 'FileUtils.rb'
 
 def startup
 	Dir.mkdir($cwd+"/case")
@@ -219,6 +218,9 @@ def skp_of_export
 		for p in 0..entities.length-1 do
 			entity = entities[p]
 			model_name = entity.name
+			if model_name.include? "_Ref"
+				model_name = model_name.split("_").first
+			end
 			mm = model_name
 			$var_file.puts("\t"+mm+"_"+mm)
 			$var_file.puts("\t{")
