@@ -434,7 +434,7 @@ def snappymesh_create
 	$var_file.puts("{")
 	$var_file.puts("\tlocationInMesh\t("+avgX.to_s+" "+avgY.to_s+" "+avgZ.to_s+");")
 	$var_file.puts("\tmaxLocalCells\t6000000;")
-	$var_file.puts("\tmaxGlobalCells\t0000000;")
+	$var_file.puts("\tmaxGlobalCells\t20000000;")
 	$var_file.puts("\tminRefinementCells\t50;")
 	$var_file.puts("\tnCellsBetweenLevels\t3;")
 	$var_file.puts("\tresolveFeatureAngle\t60;")
