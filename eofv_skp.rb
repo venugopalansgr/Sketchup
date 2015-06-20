@@ -18,6 +18,7 @@
 # Created by: Venugopalan Raghavan
 # STL Plugin amended from the skp_to_dxf.rb plugin (by Nathan Bromham & Konrad Shroeder)
 
+# Update 20 Jun 2015: "block" in blockMeshDict corrected to "blocks"
 require 'sketchup.rb'
 
 def startup
@@ -291,7 +292,7 @@ def constant_create
 	end
 	
 	$var_file.puts(");")
-	$var_file.puts("block\n(")
+	$var_file.puts("blocks\n(")
 	$var_file.puts("\thex\t(0 1 2 3 4 5 6 7)\t(10 10 10)\tsimpleGrading\t(1 1 1)")
 	$var_file.puts(");")
 	
