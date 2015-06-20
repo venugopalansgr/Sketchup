@@ -19,6 +19,7 @@
 # STL Plugin amended from the skp_to_dxf.rb plugin (by Nathan Bromham & Konrad Shroeder)
 
 # Update 20 Jun 2015: "block" in blockMeshDict corrected to "blocks"
+# Update 20 Jun 2015: Removed spacing in div(var1, var2) that was causing problems. Should be only div(var1,var2)
 require 'sketchup.rb'
 
 def startup
@@ -621,21 +622,21 @@ def fvSchemes_create
 
 	$var_file.puts("\ndivSchemes\n{")
 	$var_file.puts("\tdefault\tnone;")
-	$var_file.puts("\tdiv(phi, U)\tGauss upwind;")
-	$var_file.puts("\tdiv(phi, T)\tGauss upwind;")
-	$var_file.puts("\tdiv(phi, k)\tGauss upwind;")
-	$var_file.puts("\tdiv(phi, epsilon)\tGauss upwind;")
-	$var_file.puts("\tdiv(phi, omega)\tGauss upwind;")
+	$var_file.puts("\tdiv(phi,U)\tGauss upwind;")
+	$var_file.puts("\tdiv(phi,T)\tGauss upwind;")
+	$var_file.puts("\tdiv(phi,k)\tGauss upwind;")
+	$var_file.puts("\tdiv(phi,epsilon)\tGauss upwind;")
+	$var_file.puts("\tdiv(phi,omega)\tGauss upwind;")
 	$var_file.puts("\tdiv((nuEff*dev(T(grad(U)))))\tGauss upwind;")
 	$var_file.puts("}")
 	
 	$var_file.puts("\nlaplacianSchemes\n{")
 	$var_file.puts("\tdefault\tnone;")
-	$var_file.puts("\tlaplacian(nuEff, U)\tGauss linear corrected;")
-	$var_file.puts("\tlaplacian(kappaEff, T)\tGauss linear corrected;")
-	$var_file.puts("\tlaplacian(DkEff, k)\tGauss linear corrected;")
-	$var_file.puts("\tlaplacian(DepsilonEff, epsilon)\tGauss linear corrected;")
-	$var_file.puts("\tlaplacian(DomegaEff, omega)\tGauss linear corrected;")
+	$var_file.puts("\tlaplacian(nuEff,U)\tGauss linear corrected;")
+	$var_file.puts("\tlaplacian(kappaEff,T)\tGauss linear corrected;")
+	$var_file.puts("\tlaplacian(DkEff,k)\tGauss linear corrected;")
+	$var_file.puts("\tlaplacian(DepsilonEff,epsilon)\tGauss linear corrected;")
+	$var_file.puts("\tlaplacian(DomegaEff,omega)\tGauss linear corrected;")
 	$var_file.puts("\tlaplacian((1|A(U)),p)\tGauss linear corrected;")
 	$var_file.puts("\tlaplacian((1|A(U)),p_rgh)\tGauss linear corrected;")
 	$var_file.puts("}")
