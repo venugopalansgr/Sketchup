@@ -18,8 +18,10 @@
 # Created by: Venugopalan Raghavan
 # STL Plugin amended from the skp_to_dxf.rb plugin (by Nathan Bromham & Konrad Shroeder)
 
-# Update 20 Jun 2015: "block" in blockMeshDict corrected to "blocks"
-# Update 20 Jun 2015: Removed spacing in div(var1, var2) that was causing problems. Should be only div(var1,var2)
+# Major Update 20 Jun 2015: "block" in blockMeshDict corrected to "blocks"
+# Major Update 20 Jun 2015: Removed spacing in div(var1, var2) that was causing problems. Should be only div(var1,var2)
+# Major Update 21 Jun 2015: Redefined order of points in blockMeshDict. Original order does not allow snappyHexMesh to work
+
 require 'sketchup.rb'
 
 def startup
@@ -269,28 +271,45 @@ def constant_create
 	
 	list = [2,3,1,0,6,7,5,4]
 	
-	for l in list
+	minX = $bounds.corner(0)[0].to_f*0.0254
+	minY = $bounds.corner(0)[1].to_f*0.0254
+	minZ = $bounds.corner(0)[2].to_f*0.0254
+	
+	maxX = $bounds.corner(0)[0].to_f*0.0254
+	maxY = $bounds.corner(0)[1].to_f*0.0254
+	maxZ = $bounds.corner(0)[2].to_f*0.0254
+	
+	for l in 0..7
 		x = $bounds.corner(l)[0].to_f*0.0254
 		y = $bounds.corner(l)[1].to_f*0.0254
 		z = $bounds.corner(l)[2].to_f*0.0254
-		case l
-		when 2,0,6,4
-			x = x - 100
-		when 3,1,7,5
-			x = x + 100
-		end
-		case l
-		when 2,3,6,7
-			y = y + 100
-		when 0,1,4,5
-			y = y - 100
-		end
-		case l
-		when 4,5,6,7
-			z = 3*z
-		end
-		$var_file.puts("\t("+x.to_s+" "+y.to_s+" "+z.to_s+")")
+		
+		minX = (minX < x) ? minX : x
+		minY = (minY < y) ? minY : y
+		minZ = (minZ < z) ? minZ : z
+		
+		maxX = (maxX > x) ? maxX : x
+		maxY = (maxY > y) ? maxY : y
+		maxZ = (maxZ > z) ? maxZ : z
 	end
+	
+	minX = minX - 100
+	maxX = maxX + 100
+	
+	minY = minY - 100
+	maxY = maxY + 100
+	
+	maxZ = 3*maxZ
+	
+	$var_file.puts("\t("+minX.to_s+" "+maxY.to_s+" "+maxZ.to_s+")")
+	$var_file.puts("\t("+maxX.to_s+" "+maxY.to_s+" "+maxZ.to_s+")")
+	$var_file.puts("\t("+maxX.to_s+" "+minY.to_s+" "+maxZ.to_s+")")
+	$var_file.puts("\t("+minX.to_s+" "+minY.to_s+" "+maxZ.to_s+")")
+	
+	$var_file.puts("\t("+minX.to_s+" "+maxY.to_s+" "+minZ.to_s+")")
+	$var_file.puts("\t("+maxX.to_s+" "+maxY.to_s+" "+minZ.to_s+")")
+	$var_file.puts("\t("+maxX.to_s+" "+minY.to_s+" "+minZ.to_s+")")
+	$var_file.puts("\t("+minX.to_s+" "+minY.to_s+" "+minZ.to_s+")")
 	
 	$var_file.puts(");")
 	$var_file.puts("blocks\n(")
@@ -627,7 +646,7 @@ def fvSchemes_create
 	$var_file.puts("\tdiv(phi,k)\tGauss upwind;")
 	$var_file.puts("\tdiv(phi,epsilon)\tGauss upwind;")
 	$var_file.puts("\tdiv(phi,omega)\tGauss upwind;")
-	$var_file.puts("\tdiv((nuEff*dev(T(grad(U)))))\tGauss upwind;")
+	$var_file.puts("\tdiv((nuEff*dev(T(grad(U)))))\tGauss linear;")
 	$var_file.puts("}")
 	
 	$var_file.puts("\nlaplacianSchemes\n{")
@@ -680,7 +699,7 @@ def fvSolution_create
 	$var_file.puts("\t}")
 	
 	$var_file.puts("\t\"k|omega|epsilon|T|U\"\n\t{")
-	$var_file.puts("\t\tsolver\tBiCG;")
+	$var_file.puts("\t\tsolver\tPBiCG;")
 	$var_file.puts("\t\tpreconditioner\tDILU;")
 	$var_file.puts("\t\ttolerance\t1e-05;")
 	$var_file.puts("\t\trelTol\t0.1;")
