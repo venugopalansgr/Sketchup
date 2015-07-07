@@ -12,6 +12,9 @@
 # Notes: Code is free. Appreciate feedback/acknowledging when using it
 # Created by: Venugopalan Raghavan
 
+# Update 07 Jul 2015: Amended "if" condition in line 109 with additional paranthesis. 
+# Update 07 Jul 2015: Original would lead to fvert always being empty
+
 require 'sketchup.rb'
 
 def cartize
@@ -104,7 +107,7 @@ def cartize
 					fcnt = fcnt + 1
 					for a in 0..e.vertices.length-1 do 
 						ss << [e.vertices[a].position[0],e.vertices[a].position[1],e.vertices[a].position[2]]
-						if (fvert.include? (ss[0]) == false)
+						if ((fvert.include? (ss[0])) == false)
 							fvert <<(ss[0])
 						end
 						ss = []
